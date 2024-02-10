@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Algo2390 {
+public class Pt1_2390_김지희 {
 
     public static void main(String[] args) throws IOException {
 
