@@ -17,10 +17,10 @@ public class B9012_samgashyeong {
 
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int n = st.nextToken();
-        int k = st.nextToken();
+        int n = Integer.parseInt(st.nextToken());
+        int k = Integer.parseInt(st.nextToken());
 
-        Queue<Integer> que = new Queue<>();
+        Queue<Integer> que = new LinkedList<>();
         for(int i = 0;i<n;i++){
             que.add(i+1);
         }
@@ -40,3 +40,4 @@ public class B9012_samgashyeong {
 
     }
 }
+
