@@ -8,122 +8,71 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+
 public class B1707_yybmion {
+    static int[] team;
+    static ArrayList<ArrayList<Integer>> graph;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
-        int K = Integer.parseInt(br.readLine());
-        ArrayList<ArrayList<Integer>> list;
-        Queue<Integer> queue;
-        boolean[] visited;
-        int[] colorRes;
-        int findVisit = 0;
-        int breakPoint = 0;
-        String sValue = "YES";
+        int N = Integer.parseInt(br.readLine());
 
-        while (K-- > 0) {
-            sValue = "YES";
-            breakPoint = 0;
-            StringTokenizer stt = new StringTokenizer(br.readLine());
-            list = new ArrayList<>();
-            queue = new LinkedList<>();
+        StringTokenizer stt;
+
+        while(N-->0){
+
+            stt = new StringTokenizer(br.readLine());
+
             int V = Integer.parseInt(stt.nextToken());
             int E = Integer.parseInt(stt.nextToken());
-            visited = new boolean[V];
-            colorRes = new int[V];
-            for (int j = 0; j < V; j++) {
-                list.add(new ArrayList<>());
+
+            graph = new ArrayList<>();
+            team = new int[V+1];
+
+            for(int i=0;i<=V;i++){
+                graph.add(new ArrayList<>());
             }
-            for (int i = 0; i < E; i++) {
+
+            for(int j=0;j<E;j++) {
                 stt = new StringTokenizer(br.readLine());
-                int e1 = Integer.parseInt(stt.nextToken()) - 1;
-                int e2 = Integer.parseInt(stt.nextToken()) - 1;
+                int v1 = Integer.parseInt(stt.nextToken());
+                int v2 = Integer.parseInt(stt.nextToken());
 
-                list.get(e1).add(e2);
-                list.get(e2).add(e1);
+                graph.get(v1).add(v2);
+                graph.get(v2).add(v1);
             }
 
-            colorRes[0] = 1;
+            boolean res = false;
 
-            for (int j = 0; j < V; j++) {
-                if(visited[j]==false){
-                    queue.add(j);
-                    visited[j] = true;
-                }else{
-                    for(int kop : list.get(j)){
-                        if(colorRes[j]==1){
-                            if(colorRes[kop] ==1){
-                                sValue = "NO";
-                                breakPoint = 1;
-                                break;
-                            }
-                        }else{
-                            if(colorRes[kop] == 2){
-                                sValue = "NO";
-                                breakPoint = 1;
-                                break;
-                            }
-                        }
-                    }
-                    if(breakPoint==1){
-                        break;
-                    }
-                    continue;
+            for(int i=0;i<=V;i++){
+                if(team[i]==0){
+                    res = isBipart(i);
                 }
-                if(breakPoint==1){
-                    break;
-                }
-
-                Integer value = queue.poll();
-                if(colorRes[value]==0) colorRes[value]=1;
-                for (int ret : list.get(value)) {
-                    if (visited[ret] == false) {
-                        visited[ret] = true;
-
-                        if (colorRes[value] == 1) {
-                            colorRes[ret] = 2;
-                        } else {
-                            colorRes[ret] = 1;
-                        }
-
-                       // queue.add(ret);
-                    }
-//                    if (colorRes[value] == colorRes[ret]) {
-//                        sValue = "NO";
-//                        breakPoint = 1;
-//                        break;
-//                    }
-                }
-//                if (breakPoint == 1) break;
-//                if (queue.isEmpty()) {
-//                    findVisit = 0;
-//                    while (visited[findVisit] != false) {
-//                        if (findVisit == V - 1) break;
-//                        findVisit++;
-//                    }
-//                    queue.add(findVisit);
-//                    if (findVisit == V - 1) queue.clear();
-//                }
-
+                if(!res) break;
             }
-//            for(int r=0;r<V-1;){
-//                if(colorRes[r]==1) {
-//                    if (colorRes[++r] == 1) {
-//                        sValue = "NO";
-//                        break;
-//                    }
-//                }else{
-//                    if(colorRes[++r]==2) {
-//                        sValue = "NO";
-//                        break;
-//                    }
-//                }
-//            }
-            sb.append(sValue + "\n");
+            if(res) System.out.println("YES");
+            else System.out.println("NO");
         }
+    }
 
-        System.out.println(sb.toString());
+    private static boolean isBipart(int i) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(i);
 
+        team[i] = 1;
+
+        while(!queue.isEmpty()){
+            Integer cur = queue.poll();
+            for (Integer next : graph.get(cur)) {
+                if(team[cur] == team[next]) return false;
+
+                if(team[next]==0){
+                    team[next] = team[cur]*-1;
+                    queue.add(next);
+                }
+            }
+        }
+        return true;
     }
 }

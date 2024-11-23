@@ -27,7 +27,7 @@ public class B9663_yybmion {
         for(int i=0;i<N;i++){
             arr[depth]=i;
             if(checkQ(depth,arr)) {
-                n_Queen(depth+1,arr);  //depth++해서 stackOverflow나옴;;;
+                n_Queen(depth+1,arr);
             }
         }
     }
